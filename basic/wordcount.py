@@ -72,10 +72,7 @@ def get_words(filename):
                 line = line.replace(char, ' ')
         words = line.lower().split()
         for word in words:
-            if word in d:
-                d[word] += 1
-            else:
-                d[word] = 1
+            d[word] = d.get(word, 0) + 1
     f.close()
     return d
 
