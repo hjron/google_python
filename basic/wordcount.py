@@ -38,6 +38,7 @@ print_words() and print_top().
 """
 
 import sys
+import string
 
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
@@ -49,6 +50,7 @@ def print_words(filename):
     d = get_words(filename)
     for k, v in sorted(d.items()):
         print(k, '>', v)
+    print(f'total words: {sum(d.values()):,d}')
 
 def print_top(filename):
     d = get_words(filename)
@@ -58,9 +60,16 @@ def print_top(filename):
         print(pair[0], '>', pair[1])
 
 def get_words(filename):
+    '''filename is a valid path. replaces punctuation with a space and
+    returns a dict[word]:count'''
     f = open(filename, 'r')
     d = {}
+    punctuation_list = list(string.punctuation)
+
     for line in f:
+        for char in line:
+            if char in punctuation_list:
+                line = line.replace(char, ' ')
         words = line.lower().split()
         for word in words:
             if word in d:
