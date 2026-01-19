@@ -46,26 +46,51 @@ import sys
 
 
 def mimic_dict(filename):
-  """Returns mimic dict mapping each word to list of words which follow it."""
-  # +++your code here+++
-  return
+    """Returns mimic dict mapping each word to list of words which follow it."""
+    f = open(filename, 'r')
+    text = f.read().split()
+    f.close()
 
+    d = {}
 
+    d[''] = [text[0]] # per spec
+    for i in range(len(text) - 1):
+        d[text[i]] = d.get(text[i], []) + [text[i + 1]]
+    d[text[i+1]] = ['']  # first word is a follower of the last....
+
+    return d
+  
 def print_mimic(mimic_dict, word):
-  """Given mimic dict and start word, prints 200 random words."""
-  # +++your code here+++
-  return
+    """Given mimic dict and start word, prints 200 random words."""
+    word_list = []
+    # 'prime' the pump
+    word_list.append(random.choice(mimic_dict[word]))
 
+    for i in range(200):
+        word_list.append(random.choice(mimic_dict[word_list[-1]]))
+    
+    # line breaks every 70 or so characters
+    count = 0
+    text = ''
+    for char in ' '.join(word_list):
+        count += 1
+        if count > 70 and char == ' ':
+            text += '\n'
+            count = 0
+        else:
+            text += char
+
+    print(text.rstrip()) # remove any trailing whitespace
 
 # Provided main(), calls mimic_dict() and mimic()
 def main():
-  if len(sys.argv) != 2:
-    print('usage: ./mimic.py file-to-read')
-    sys.exit(1)
+    if len(sys.argv) != 2:
+        print('usage: ./mimic.py file-to-read')
+        sys.exit(1)
 
-  dict = mimic_dict(sys.argv[1])
-  print_mimic(dict, '')
+    dict = mimic_dict(sys.argv[1])
+    print_mimic(dict, '')
 
 
 if __name__ == '__main__':
-  main()
+    main()
